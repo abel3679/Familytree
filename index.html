@@ -13,89 +13,9 @@
             height: 100%;
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
             background-color: #f4f6f9;
-        }
-        /* Style for the secure password screen */
-        #login-screen {
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background-color: #2c3e50;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            z-index: 100;
-            color: white;
-        }
-        .login-box {
-            background: white;
-            padding: 30px;
-            border-radius: 8px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
-            text-align: center;
-            color: #333;
-            width: 90%;
-            max-width: 320px;
-        }
-        .login-box h2 { margin-top: 0; color: #2c3e50; font-size: 22px; }
-        .login-box input {
-            width: 100%;
-            padding: 10px;
-            margin: 15px 0;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-            box-sizing: border-box;
-            font-size: 16px;
-        }
-        .login-box button {
-            background-color: #27ae60;
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            font-size: 16px;
-            border-radius: 4px;
-            cursor: pointer;
-            width: 100%;
-        }
-        .login-box button:hover { background-color: #219653; }
-        #error-msg { color: #c0392b; font-size: 14px; margin-top: 5px; display: none; }
-        
-        /* Tree Layout Styles */
-        #header {
-            background-color: #2c3e50;
-            color: white;
-            padding: 15px 20px;
-            text-align: center;
-            position: absolute;
-            top: 0; left: 0; right: 0;
-            z-index: 10;
-        }
-        #header h1 { margin: 0; font-size: 24px; }
-        #tree {
-            width: 100%;
-            height: 100%;
-            padding-top: 60px;
-            box-sizing: border-box;
-            display: none; /* Hidden until login succeeds */
-        }
-    </style>
-</head><!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Our Family Tree</title>
-    <script src="https://balkan.app/js/familytree.js"></script>
-    <style>
-        html, body {
-            margin: 0;
-            padding: 0;
-            width: 100%;
-            height: 100%;
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-            background-color: #f4f6f9;
             overflow: hidden;
         }
-        /* Secure password screen overlay */
+        /* Secure login screen layout */
         #login-screen {
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
@@ -104,7 +24,7 @@
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            z-index: 9999; /* Sits completely on top */
+            z-index: 9999;
             color: white;
         }
         .login-box {
@@ -136,6 +56,89 @@
             border-radius: 4px;
             cursor: pointer;
             width: 100%;
+            font-weight: bold;
+        }
+        #error-msg { color: #c0392b; font-size: 14px; margin-top: 8px; display: none; }
+        
+        /* Main Layout Styles */
+        #header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px 20px;
+            text-align: center;
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            z-index: 10;
+        }
+        #header h1 { margin: 0; font-size: 22px; }
+        #tree {
+            width: 100%;
+            height: 100%;
+            box-sizing: border-box;
+            padding-top: 60px;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="login-screen">
+        <div class="login-box">
+            <h2>Family Portal</h2>
+            <p>Enter the access password to view our family tree.</p>
+            <input type="password" id="password-input" placeholder="Password" onkeypress="handleKeyPress(event)">
+            <button onclick="checkPassword()">Access Tree</button>
+            <div id="error-msg">Incorrect password. Try again!</div>
+        </div>
+    </div>
+
+    <div id="header">
+        <h1>Our Family History</h1>
+    </div>
+    <div id="tree"></div>
+
+    <script>
+        const SECRET_PASSWORD = "OurFamily2026"; 
+
+        function handleKeyPress(e) {
+            if (e.key === 'Enter') checkPassword();
+        }
+
+        function checkPassword() {
+            const userInput = document.getElementById("password-input").value;
+            const errorMsg = document.getElementById("error-msg");
+
+            if (userInput === SECRET_PASSWORD) {
+                // Instantly remove the login screen overlay completely
+                document.getElementById("login-screen").remove();
+            } else {
+                errorMsg.style.display = "block";
+                document.getElementById("password-input").value = "";
+            }
+        }
+
+        // Initialize the layout structure
+        const familyData = [
+            { id: 1, name: "Grandfather", gender: "male" },
+            { id: 2, name: "Grandmother", gender: "female", pids: [1] },
+            { id: 3, name: "Father", gender: "male", fid: 1, mid: 2 },
+            { id: 4, name: "Mother", gender: "female", pids: [3] },
+            { id: 5, name: "Abel", gender: "male", fid: 3, mid: 4 },
+            { id: 6, name: "Brother", gender: "male", fid: 3, mid: 4 },
+            { id: 7, name: "Sister", gender: "female", fid: 3, mid: 4 },
+            { id: 8, name: "Son", gender: "male", fid: 5 },
+            { id: 9, name: "Daughter 1", gender: "female", fid: 5 },
+            { id: 10, name: "Daughter 2", gender: "female", fid: 5 }
+        ];
+
+        const tree = new FamilyTree(document.getElementById("tree"), {
+            nodes: familyData,
+            nodeBinding: { field_0: "name" },
+            template: "tomorrow"
+        });
+    </script>
+</body>
+</html>
+
             font-weight: bold;
         }
         #error-msg { color: #c0392b; font-size: 14px; margin-top: 8px; display: none; }
