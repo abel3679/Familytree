@@ -33,52 +33,74 @@
         #header {
             background-color: #2c3e50; color: white; padding: 15px;
             text-align: center; font-size: 20px; font-weight: bold;
+            position: sticky; top: 0; z-index: 100;
         }
-        
-        .tree-container {
-            padding: 20px; display: flex; flex-direction: column; align-items: center; gap: 40px;
-            overflow-y: auto; height: calc(100vh - 60px); box-sizing: border-box;
-        }
-        .generation {
-            display: flex; justify-content: center; gap: 20px; width: 100%; flex-wrap: wrap;
-        }
-        
-        /* Interactive profile card styles */
-        .node {
-            background: white; padding: 15px 20px; border-radius: 6px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1); min-width: 120px; text-align: center;
-            font-weight: 500; font-size: 15px; border-left: 5px solid #bdc3c7;
-            cursor: pointer; transition: transform 0.2s, box-shadow 0.2s;
-        }
-        .node:hover, .node:active {
-            transform: scale(1.05);
-            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-        }
-        .male { border-left-color: #3498db; }
-        .female { border-left-color: #e74c3c; }
 
-        /* Smooth Profile Pop-up Modal Styles */
+        /* Scrollable Canvas for large trees */
+        .tree-canvas {
+            width: 100%; height: calc(100vh - 60px);
+            overflow: auto; padding: 40px 20px; box-sizing: border-box;
+        }
+
+        /* Pure CSS Tree Architecture Logic */
+        .tree, .tree ul {
+            display: flex; justify-content: center; margin: 0; padding: 0; list-style-type: none;
+        }
+        .tree ul {
+            position: relative; padding-top: 20px; transition: all 0.5s;
+        }
+        .tree li {
+            text-align: center; position: relative; padding: 20px 5px 0 5px; transition: all 0.5s;
+            display: flex; flex-direction: column; align-items: center;
+        }
+        /* Connectors */
+        .tree li::before, .tree li::after {
+            content: ''; position: absolute; top: 0; right: 50%;
+            border-top: 2px solid #a0aec0; width: 50%; height: 20px;
+        }
+        .tree li::after {
+            right: auto; left: 50%; border-left: 2px solid #a0aec0;
+        }
+        .tree li:only-child::after, .tree li:only-child::before { display: none; }
+        .tree li:only-child { padding-top: 0; }
+        .tree li:first-child::before, .tree li:last-child::after { border: 0 none; }
+        .tree li:last-child::before { border-right: 2px solid #a0aec0; border-radius: 0 5px 0 0; }
+        .tree li:first-child::after { border-radius: 5px 0 0 0; }
+        .tree ul::before {
+            content: ''; position: absolute; top: 0; left: 50%;
+            border-left: 2px solid #a0aec0; width: 0; height: 20px;
+        }
+
+        /* Profile Node Cards */
+        .couple-wrapper {
+            display: flex; gap: 4px; background: rgba(160, 174, 192, 0.1); 
+            padding: 4px; border-radius: 8px; border: 1px dashed #cbd5e0;
+        }
+        .node {
+            background: white; padding: 12px 15px; border-radius: 6px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05); min-width: 110px; text-align: center;
+            font-weight: 500; font-size: 13px; border-top: 4px solid #cbd5e0;
+            cursor: pointer; transition: transform 0.2s; position: relative;
+        }
+        .node:hover { transform: scale(1.05); box-shadow: 0 6px 12px rgba(0,0,0,0.1); }
+        .male { border-top-color: #3498db; }
+        .female { border-top-color: #e74c3c; }
+
+        /* Modal Popup Styles */
         .modal-overlay {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background: rgba(0, 0, 0, 0.5); display: none;
-            justify-content: center; align-items: center; z-index: 500;
+            justify-content: center; align-items: center; z-index: 5000;
         }
         .modal-content {
             background: white; padding: 25px; border-radius: 10px;
-            width: 85%; max-width: 400px; box-shadow: 0 5px 20px rgba(0,0,0,0.3);
-            position: relative; animation: fadeIn 0.3s ease;
+            width: 85%; max-width: 380px; box-shadow: 0 5px 20px rgba(0,0,0,0.3);
+            position: relative;
         }
-        @keyframes fadeIn {
-            from { transform: translateY(20px); opacity: 0; }
-            to { transform: translateY(0); opacity: 1; }
-        }
-        .close-btn {
-            position: absolute; top: 12px; right: 15px;
-            font-size: 22px; cursor: pointer; color: #7f8c8d; font-weight: bold;
-        }
+        .close-btn { position: absolute; top: 12px; right: 15px; font-size: 22px; cursor: pointer; color: #7f8c8d; font-weight: bold; }
         .modal-content h3 { margin-top: 0; color: #2c3e50; border-bottom: 2px solid #ecf0f1; padding-bottom: 8px; }
-        .info-row { margin: 12px 0; font-size: 15px; line-height: 1.5; }
-        .info-label { font-weight: bold; color: #7f8c8d; display: inline-block; width: 110px; }
+        .info-row { margin: 12px 0; font-size: 14px; }
+        .info-label { font-weight: bold; color: #7f8c8d; display: inline-block; width: 100px; }
     </style>
 </head>
 <body>
@@ -95,45 +117,53 @@
 
     <div id="header">Our Family History</div>
     
-    <div class="tree-container">
-        <div class="generation">
-            <div class="node male" onclick="openProfile('grandfather')">Grandfather</div>
-            <div class="node female" onclick="openProfile('grandmother')">Grandmother</div>
-        </div>
-        
-        <div class="generation">
-            <div class="node male" onclick="openProfile('father')">Father</div>
-            <div class="node female" onclick="openProfile('mother')">Mother</div>
-        </div>
-        
-        <div class="generation">
-            <div class="node male" onclick="openProfile('brother')">Brother</div>
-            <div class="node male" onclick="openProfile('abel')">Abel</div>
-            <div class="node female" onclick="openProfile('sister')">Sister</div>
-        </div>
-
-        <div class="generation">
-            <div class="node male" onclick="openProfile('son')">Son</div>
-            <div class="node female" onclick="openProfile('daughter1')">Daughter 1</div>
-            <div class="node female" onclick="openProfile('daughter2')">Daughter 2</div>
+    <div class="tree-canvas">
+        <div class="tree">
+            <ul>
+                <li>
+                    <div class="couple-wrapper">
+                        <div class="node male" onclick="openProfile('gf')">Grandfather</div>
+                        <div class="node female" onclick="openProfile('gm')">Grandmother</div>
+                    </div>
+                    
+                    <ul>
+                        <li>
+                            <div class="couple-wrapper">
+                                <div class="node male" onclick="openProfile('father')">Father</div>
+                                <div class="node female" onclick="openProfile('mother')">Mother</div>
+                            </div>
+                            <ul>
+                                <li><div class="node male" onclick="openProfile('brother')">Brother</div></li>
+                                <li><div class="node male" onclick="openProfile('abel')">Abel</div></li>
+                                <li><div class="node female" onclick="openProfile('sister')">Sister</div></li>
+                            </ul>
+                        </li>
+                        <li>
+                            <div class="couple-wrapper">
+                                <div class="node male" onclick="openProfile('uncle')">Uncle</div>
+                                <div class="node female" onclick="openProfile('aunt')">Aunt</div>
+                            </div>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
         </div>
     </div>
 
-    <div class="modal-overlay" id="profile-modal" onclick="closeProfile(event)">
+    <div class="modal-overlay" id="profile-modal" onclick="document.getElementById('profile-modal').style.display='none'">
         <div class="modal-content" onclick="event.stopPropagation()">
             <span class="close-btn" onclick="document.getElementById('profile-modal').style.display='none'">&times;</span>
-            <h3 id="modal-name">Name Placeholder</h3>
-            <div class="info-row"><span class="info-label">Date of Birth:</span><span id="modal-dob">-</span></div>
-            <div class="info-row"><span class="info-label">Gender:</span><span id="modal-gender">-</span></div>
-            <div class="info-row"><span class="info-label">Status:</span><span id="modal-status">-</span></div>
-            <div class="info-row"><span class="info-label">Description:</span><p id="modal-desc" style="margin: 5px 0 0 0; color: #555;"></p></div>
+            <h3 id="m-name">-</h3>
+            <div class="info-row"><span class="info-label">Date of Birth:</span><span id="m-dob">-</span></div>
+            <div class="info-row"><span class="info-label">Gender:</span><span id="m-gender">-</span></div>
+            <div class="info-row"><span class="info-label">Status:</span><span id="m-status">-</span></div>
+            <div class="info-row"><span class="info-label">Description:</span><p id="m-desc" style="margin:5px 0 0 0; color:#555;"></p></div>
         </div>
     </div>
 
     <script>
         function checkPassword() {
-            const userInput = document.getElementById("password-input").value;
-            if (userInput === "OurFamily2026") {
+            if (document.getElementById("password-input").value === "OurFamily2026") {
                 document.getElementById("login-screen").remove();
             } else {
                 document.getElementById("error-msg").style.display = "block";
@@ -141,97 +171,27 @@
             }
         }
 
-        // Database object containing customizable details for each person
         const familyDatabase = {
-            grandfather: {
-                name: "Grandfather's Name",
-                dob: "January 15, 1945",
-                gender: "Male",
-                status: "Deceased",
-                desc: "Loving patriarch of the family, known for his wisdom, historic stories, and dedication to farming."
-            },
-            grandmother: {
-                name: "Grandmother's Name",
-                dob: "May 10, 1950",
-                gender: "Female",
-                status: "Alive",
-                desc: "The heart of the household. Amazing cook who loves gardening and spending time with her grandchildren."
-            },
-            father: {
-                name: "Father's Name",
-                dob: "March 22, 1973",
-                gender: "Male",
-                status: "Alive",
-                desc: "Hardworking head of our immediate home, baseline mentor, and avid tech enthusiast."
-            },
-            mother: {
-                name: "Mother's Name",
-                dob: "September 05, 1978",
-                gender: "Female",
-                status: "Alive",
-                desc: "Incredibly supportive, kind, and organized. She keeps the whole extended family connected."
-            },
-            abel: {
-                name: "Abel",
-                dob: "October 14, 2003",
-                gender: "Male",
-                status: "Alive",
-                desc: "Finance professional and certified management accountant based in the UAE. Dedicated to business strategy and tech projects."
-            },
-            brother: {
-                name: "Brother's Name",
-                dob: "August 12, 2005",
-                gender: "Male",
-                status: "Alive",
-                desc: "Enthusiastic student, sports fan, and brilliant analytical mind."
-            },
-            sister: {
-                name: "Sister's Name",
-                dob: "June 30, 2008",
-                gender: "Female",
-                status: "Alive",
-                desc: "Creative artist of the family who loves sketching, music, and literature."
-            },
-            son: {
-                name: "Son's Name",
-                dob: "December 01, 2024",
-                gender: "Male",
-                status: "Alive",
-                desc: "The youngest bundle of joy in our generation line."
-            },
-            daughter1: {
-                name: "Daughter 1 Name",
-                dob: "April 18, 2021",
-                gender: "Female",
-                status: "Alive",
-                desc: "Full of bright energy, curious about everything, and loves storybooks."
-            },
-            daughter2: {
-                name: "Daughter 2 Name",
-                dob: "November 11, 2022",
-                gender: "Female",
-                status: "Alive",
-                desc: "Sweet, quiet personality who loves playing with toys and following her sister."
-            }
+            gf: { name: "Grandfather", dob: "10/05/1940", gender: "Male", status: "Deceased", desc: "Family Patriarch." },
+            gm: { name: "Grandmother", dob: "15/08/1945", gender: "Female", status: "Alive", desc: "Loving Grandmother." },
+            father: { name: "Father", dob: "22/03/1970", gender: "Male", status: "Alive", desc: "Hardworking dad." },
+            mother: { name: "Mother", dob: "05/09/1975", gender: "Female", status: "Alive", desc: "Caring mom." },
+            abel: { name: "Abel", dob: "14/10/2003", gender: "Male", status: "Alive", desc: "Finance Professional & CMA USA." },
+            brother: { name: "Brother", dob: "12/04/2005", gender: "Male", status: "Alive", desc: "Tech explorer." },
+            sister: { name: "Sister", dob: "18/11/2008", gender: "Female", status: "Alive", desc: "Creative mind." },
+            uncle: { name: "Uncle Name", dob: "01/01/1972", gender: "Male", status: "Alive", desc: "Father's brother." },
+            aunt: { name: "Aunt Name", dob: "02/02/1976", gender: "Female", status: "Alive", desc: "Uncle's wife." }
         };
 
         function openProfile(key) {
-            const person = familyDatabase[key];
-            if (!person) return;
-
-            // Fill the pop-up panel with the person's unique data rows
-            document.getElementById("modal-name").innerText = person.name;
-            document.getElementById("modal-dob").innerText = person.dob;
-            document.getElementById("modal-gender").innerText = person.gender;
-            document.getElementById("modal-status").innerText = person.status;
-            document.getElementById("modal-desc").innerText = person.desc;
-
-            // Open the view layer
+            const p = familyDatabase[key];
+            if (!p) return;
+            document.getElementById("m-name").innerText = p.name;
+            document.getElementById("m-dob").innerText = p.dob;
+            document.getElementById("m-gender").innerText = p.gender;
+            document.getElementById("m-status").innerText = p.status;
+            document.getElementById("m-desc").innerText = p.desc;
             document.getElementById("profile-modal").style.display = "flex";
-        }
-
-        function closeProfile(event) {
-            document.getElementById("profile-modal").style.display = "none";
         }
     </script>
 </body>
