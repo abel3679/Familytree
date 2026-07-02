@@ -36,16 +36,28 @@
             position: sticky; top: 0; z-index: 100;
         }
 
-        /* Scrollable Canvas for large trees */
+                /* Scrollable Canvas for large trees */
         .tree-canvas {
-            width: 100%; height: calc(100vh - 60px);
-            overflow: auto; padding: 40px 20px; box-sizing: border-box;
+            width: 100vw;
+            height: calc(100vh - 60px);
+            overflow-x: auto; /* Forces left-to-right swipe on mobile */
+            overflow-y: auto; /* Forces top-to-bottom scroll */
+            padding: 40px 20px;
+            box-sizing: border-box;
+            -webkit-overflow-scrolling: touch; /* Makes scrolling silky smooth on mobile */
         }
 
+
         /* Pure CSS Tree Architecture Logic */
-        .tree, .tree ul {
-            display: flex; justify-content: center; margin: 0; padding: 0; list-style-type: none;
+                .tree, .tree ul {
+            display: flex;
+            justify-content: center;
+            margin: 0;
+            padding: 0;
+            list-style-type: none;
+            min-width: max-content; /* Prevents the tree branches from squeezing together */
         }
+
         .tree ul {
             position: relative; padding-top: 20px; transition: all 0.5s;
         }
