@@ -81,7 +81,6 @@
             white-space: nowrap;
         }
         
-        /* Updated Photo Card Node Layout */
         .node {
             background: white; border-radius: 8px;
             box-shadow: 0 4px 10px rgba(0,0,0,0.08); width: 115px; text-align: center;
@@ -93,7 +92,6 @@
         .male { border-top-color: #3498db; }
         .female { border-top-color: #e74c3c; }
 
-        /* Responsive Picture Element Box */
         .node img {
             width: 115px; height: 115px; object-fit: cover;
             background-color: #eaedf1; display: block;
@@ -127,7 +125,7 @@
             <h2>Family Portal</h2>
             <p>Enter password to view tree.</p>
             <input type="password" id="password-input" placeholder="Password" onkeypress="if(event.key==='Enter') unlockPortal()">
-            <button onclick="checkPassword() || unlockPortal()">Access Tree</button>
+            <button onclick="unlockPortal()">Access Tree</button>
             <div id="error-msg">Incorrect password.</div>
         </div>
     </div>
@@ -138,21 +136,18 @@
         <div class="tree">
             <ul>
                 <li>
-                    <!-- Generation 1 Root -->
                     <div class="couple-wrapper">
                         <div class="node male" onclick="openProfile('yovel')">
-                            <img src="avatar_m.svg" onerror="this.src='https://api.dicebear.com/7.x/initials/svg?seed=Yovel'" />
+                            <img src="yovel.jpg" onerror="this.src='https://api.dicebear.com/7.x/initials/svg?seed=Yovel'" />
                             <div class="node-name">Yovel</div>
                         </div>
                         <div class="node female" onclick="openProfile('kunjamma')">
-                            <img src="avatar_f.svg" onerror="this.src='https://api.dicebear.com/7.x/initials/svg?seed=Kunjamma'" />
+                            <img src="kunjamma.jpg" onerror="this.src='https://api.dicebear.com/7.x/initials/svg?seed=Kunjamma'" />
                             <div class="node-name">Kunjamma</div>
                         </div>
                     </div>
                     
-                    <!-- Generation 2 Main Branches -->
                     <ul>
-                        <!-- Branch 1: George Y & Susamma -->
                         <li>
                             <div class="couple-wrapper">
                                 <div class="node male" onclick="openProfile('george_y')">
@@ -200,7 +195,6 @@
                             </ul>
                         </li>
 
-                        <!-- Branch 2: Gracy Thomas & Pr. A.G. Thomas -->
                         <li>
                             <div class="couple-wrapper">
                                 <div class="node female" onclick="openProfile('gracy_t')">
@@ -280,7 +274,6 @@
                             </ul>
                         </li>
 
-                        <!-- Branch 3: Marykutty & Chacko -->
                         <li>
                             <div class="couple-wrapper">
                                 <div class="node female" onclick="openProfile('marykutty')">
@@ -343,7 +336,6 @@
                             </ul>
                         </li>
 
-                        <!-- Branch 4: Babykutty & Molamma -->
                         <li>
                             <div class="couple-wrapper">
                                 <div class="node male" onclick="openProfile('babykutty')">
@@ -361,7 +353,6 @@
                             </ul>
                         </li>
 
-                        <!-- Branch 5: Johnson & Elsy -->
                         <li>
                             <div class="couple-wrapper">
                                 <div class="node male" onclick="openProfile('johnson_y')">
@@ -379,7 +370,6 @@
                             </ul>
                         </li>
 
-                        <!-- Branch 6: Stephan Yovel & Mini -->
                         <li>
                             <div class="couple-wrapper">
                                 <div class="node male" onclick="openProfile('stephan_y')">
@@ -397,7 +387,6 @@
                             </ul>
                         </li>
 
-                        <!-- Branch 7: Samkutty & Siby Sam -->
                         <li>
                             <div class="couple-wrapper">
                                 <div class="node male" onclick="openProfile('samkutty_j')">
@@ -415,7 +404,6 @@
                             </ul>
                         </li>
 
-                        <!-- Branch 8: Mercy & Jacob -->
                         <li>
                             <div class="couple-wrapper">
                                 <div class="node female" onclick="openProfile('mercy_j')">
@@ -439,7 +427,6 @@
         </div>
     </div>
 
-    <!-- Details Overlay Modal -->
     <div class="modal-overlay" id="profile-modal" onclick="document.getElementById('profile-modal').style.display='none'">
         <div class="modal-content" onclick="event.stopPropagation()">
             <span class="close-btn" onclick="document.getElementById('profile-modal').style.display='none'">&times;</span>
