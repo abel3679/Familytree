@@ -126,15 +126,12 @@
         <div class="tree">
             <ul>
                 <li>
-                    <!-- Generation 1 Root -->
                     <div class="couple-wrapper">
                         <div class="node male" onclick="openProfile('yovel')">Yovel</div>
                         <div class="node female" onclick="openProfile('kunjamma')">Kunjamma</div>
                     </div>
                     
-                    <!-- Generation 2 Main Branches -->
                     <ul>
-                        <!-- Branch 1 -->
                         <li>
                             <div class="couple-wrapper">
                                 <div class="node male" onclick="openProfile('george_y')">George Y</div>
@@ -154,8 +151,8 @@
                                </li>
                                <li>
                                     <div class="couple-wrapper">
-                                        <div class="node male" onclick="openProfile('jithu_a')">Jithu Abraham</div>
                                         <div class="node female" onclick="openProfile('blessy_g')">Blessy George</div>
+                                        <div class="node male" onclick="openProfile('jithu_a')">Jithu Abraham</div>
                                     </div>
                                     <ul>
                                         <li><div class="node female" onclick="openProfile('jeslyn_k')">Jeslyn Kurian</div></li>
@@ -164,17 +161,16 @@
                             </ul>
                         </li>
 
-                        <!-- Branch 2 -->
                         <li>
                             <div class="couple-wrapper">
-                                <div class="node male" onclick="openProfile('ag_thomas')">Pr. A.G. Thomas</div>
                                 <div class="node female" onclick="openProfile('gracy_t')">Gracy Thomas</div>
+                                <div class="node male" onclick="openProfile('ag_thomas')">Pr. A.G. Thomas</div>
                             </div>
                             <ul>
                                 <li>
                                     <div class="couple-wrapper">
-                                        <div class="node male" onclick="openProfile('william_s')">Pr. William</div>
                                         <div class="node female" onclick="openProfile('sherly_t')">Sherly Thomas</div>
+                                        <div class="node male" onclick="openProfile('william_s')">Pr. William</div>
                                     </div>
                                     <ul>
                                         <li><div class="node female" onclick="openProfile('sherin_w')">Sherin William</div></li>
@@ -183,8 +179,8 @@
                                 </li>
                                 <li>
                                     <div class="couple-wrapper">
-                                        <div class="node male" onclick="openProfile('laji_p')">Laji Philip</div>
                                         <div class="node female" onclick="openProfile('pheba_t')">Pheba Thomas</div>
+                                        <div class="node male" onclick="openProfile('laji_p')">Laji Philip</div>
                                     </div>
                                     <ul>
                                         <li><div class="node male" onclick="openProfile('febin_l')">Febin Laji</div></li>
@@ -203,8 +199,8 @@
                                 </li>
                                 <li>
                                     <div class="couple-wrapper">
-                                        <div class="node male" onclick="openProfile('baiju_m')">Baiju Mathew</div>
                                         <div class="node female" onclick="openProfile('susan_t')">Susan Thomas</div>
+                                        <div class="node male" onclick="openProfile('baiju_m')">Baiju Mathew</div>
                                     </div>
                                     <ul>
                                         <li><div class="node male" onclick="openProfile('stephan_b')">Stephan Baiju</div></li>
@@ -214,11 +210,10 @@
                             </ul>
                         </li>
 
-                        <!-- Branch 3 -->
                         <li>
                             <div class="couple-wrapper">
-                                <div class="node male" onclick="openProfile('chacko')">Chacko</div>
                                 <div class="node female" onclick="openProfile('marykutty')">Marykutty</div>
+                                <div class="node male" onclick="openProfile('chacko')">Chacko</div>
                             </div>
                             <ul>
                                 <li>
@@ -253,7 +248,6 @@
                             </ul>
                         </li>
 
-                        <!-- Branch 4 -->
                         <li>
                             <div class="couple-wrapper">
                                 <div class="node male" onclick="openProfile('babykutty')">Babykutty</div>
@@ -265,7 +259,6 @@
                             </ul>
                         </li>
 
-                        <!-- Branch 5 -->
                         <li>
                             <div class="couple-wrapper">
                                 <div class="node male" onclick="openProfile('johnson_y')">Johnson Yovel</div>
@@ -277,7 +270,6 @@
                             </ul>
                         </li>
 
-                        <!-- Branch 6 -->
                         <li>
                             <div class="couple-wrapper">
                                 <div class="node male" onclick="openProfile('stephan_y')">Stephan Yovel</div>
@@ -289,11 +281,10 @@
                             </ul>
                         </li>
 
-                        <!-- Branch 7 (Your Branch) -->
                         <li>
                             <div class="couple-wrapper">
                                 <div class="node male" onclick="openProfile('samkutty_j')">Samkutty Jovel</div>
-                                <div class="node female" onclick="openProfile('Siby Sam')">Siby Sam</div>
+                                <div class="node female" onclick="openProfile('siby_s')">Siby Sam</div>
                             </div>
                             <ul>
                                 <li><div class="node male" onclick="openProfile('abel_s')">Abel J Sam</div></li>
@@ -301,11 +292,10 @@
                             </ul>
                         </li>
 
-                        <!-- Branch 8 -->
                         <li>
                             <div class="couple-wrapper">
-                                <div class="node male" onclick="openProfile('jacob_p')">Jacob Philip</div>
                                 <div class="node female" onclick="openProfile('mercy_j')">Mercy Jovel</div>
+                                <div class="node male" onclick="openProfile('jacob_p')">Jacob Philip</div>
                             </div>
                             <ul>
                                 <li><div class="node female" onclick="openProfile('betty_j')">Betty Jacob</div></li>
@@ -319,7 +309,6 @@
         </div>
     </div>
 
-    <!-- Details Overlay Modal -->
     <div class="modal-overlay" id="profile-modal" onclick="document.getElementById('profile-modal').style.display='none'">
         <div class="modal-content" onclick="event.stopPropagation()">
             <span class="close-btn" onclick="document.getElementById('profile-modal').style.display='none'">&times;</span>
@@ -346,7 +335,7 @@
             "yovel": { name: "Yovel", dob: "N/A", gender: "Male", status: "Deceased", desc: "Our beloved founding patriarch." },
             "kunjamma": { name: "Kunjamma", dob: "N/A", gender: "Female", status: "Deceased", desc: "Our beloved founding matriarch." },
             "samkutty_j": { name: "Samkutty Jovel", dob: "N/A", gender: "Male", status: "Alive", desc: "Loving father." },
-            "Siby Sam": { name: "Siby Sam", dob: "N/A", gender: "Female", status: "Alive", desc: "Loving mother." },
+            "siby_s": { name: "Siby Sam", dob: "N/A", gender: "Female", status: "Alive", desc: "Loving mother." },
             "abel_s": { name: "Abel J Sam", dob: "14/10/2003", gender: "Male", status: "Alive", desc: "Finance professional and qualified Certified Management Accountant (CMA USA)." },
             "acsah_s": { name: "Acsah J Sam", dob: "18/11/2008", gender: "Female", status: "Alive", desc: "Dear sister." }
         };
