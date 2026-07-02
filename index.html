@@ -4,12 +4,15 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Our Family Tree</title>
+    <!-- Stable tree rendering engine -->
+    <script src="https://balkan.app/js/familytree.js"></script>
     <style>
         html, body {
             margin: 0; padding: 0; width: 100%; height: 100%;
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-            background-color: #f4f6f9; color: #333;
+            background-color: #f4f6f9; overflow: hidden;
         }
+        /* Secure Lock Screen */
         #login-screen {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background-color: #2c3e50; display: flex; flex-direction: column;
@@ -22,83 +25,29 @@
         }
         .login-box input {
             width: 100%; padding: 12px; margin: 15px 0;
-            border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box;
+            border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; font-size: 16px;
         }
         .login-box button {
             background-color: #27ae60; color: white; border: none;
-            padding: 12px 20px; border-radius: 4px; cursor: pointer; width: 100%; font-weight: bold;
+            padding: 12px 20px; border-radius: 4px; cursor: pointer; width: 100%; font-weight: bold; font-size: 16px;
         }
         #error-msg { color: #c0392b; font-size: 14px; margin-top: 8px; display: none; }
         
+        /* Main Layout */
         #header {
-            background-color: #2c3e50; color: white; padding: 15px;
-            text-align: center; font-size: 20px; font-weight: bold;
-            position: sticky; top: 0; z-index: 100;
+            background-color: #2c3e50; color: white; padding: 15px 20px;
+            text-align: center; position: absolute; top: 0; left: 0; right: 0;
+            height: 60px; box-sizing: border-box; z-index: 10;
+        }
+        #header h1 { margin: 0; font-size: 22px; }
+        
+        /* Interactive Canvas */
+        #tree {
+            width: 100vw; height: calc(100vh - 60px);
+            position: absolute; top: 60px; left: 0; box-sizing: border-box;
         }
 
-                /* Scrollable Canvas for large trees */
-        .tree-canvas {
-            width: 100vw;
-            height: calc(100vh - 60px);
-            overflow-x: auto; /* Forces left-to-right swipe on mobile */
-            overflow-y: auto; /* Forces top-to-bottom scroll */
-            padding: 40px 20px;
-            box-sizing: border-box;
-            -webkit-overflow-scrolling: touch; /* Makes scrolling silky smooth on mobile */
-        }
-
-
-        /* Pure CSS Tree Architecture Logic */
-                .tree, .tree ul {
-            display: flex;
-            justify-content: center;
-            margin: 0;
-            padding: 0;
-            list-style-type: none;
-            min-width: max-content; /* Prevents the tree branches from squeezing together */
-        }
-
-        .tree ul {
-            position: relative; padding-top: 20px; transition: all 0.5s;
-        }
-        .tree li {
-            text-align: center; position: relative; padding: 20px 5px 0 5px; transition: all 0.5s;
-            display: flex; flex-direction: column; align-items: center;
-        }
-        /* Connectors */
-        .tree li::before, .tree li::after {
-            content: ''; position: absolute; top: 0; right: 50%;
-            border-top: 2px solid #a0aec0; width: 50%; height: 20px;
-        }
-        .tree li::after {
-            right: auto; left: 50%; border-left: 2px solid #a0aec0;
-        }
-        .tree li:only-child::after, .tree li:only-child::before { display: none; }
-        .tree li:only-child { padding-top: 0; }
-        .tree li:first-child::before, .tree li:last-child::after { border: 0 none; }
-        .tree li:last-child::before { border-right: 2px solid #a0aec0; border-radius: 0 5px 0 0; }
-        .tree li:first-child::after { border-radius: 5px 0 0 0; }
-        .tree ul::before {
-            content: ''; position: absolute; top: 0; left: 50%;
-            border-left: 2px solid #a0aec0; width: 0; height: 20px;
-        }
-
-        /* Profile Node Cards */
-        .couple-wrapper {
-            display: flex; gap: 4px; background: rgba(160, 174, 192, 0.1); 
-            padding: 4px; border-radius: 8px; border: 1px dashed #cbd5e0;
-        }
-        .node {
-            background: white; padding: 12px 15px; border-radius: 6px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.05); min-width: 110px; text-align: center;
-            font-weight: 500; font-size: 13px; border-top: 4px solid #cbd5e0;
-            cursor: pointer; transition: transform 0.2s; position: relative;
-        }
-        .node:hover { transform: scale(1.05); box-shadow: 0 6px 12px rgba(0,0,0,0.1); }
-        .male { border-top-color: #3498db; }
-        .female { border-top-color: #e74c3c; }
-
-        /* Modal Popup Styles */
+        /* Detail Modal Popup */
         .modal-overlay {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background: rgba(0, 0, 0, 0.5); display: none;
@@ -107,16 +56,17 @@
         .modal-content {
             background: white; padding: 25px; border-radius: 10px;
             width: 85%; max-width: 380px; box-shadow: 0 5px 20px rgba(0,0,0,0.3);
-            position: relative;
+            position: relative; font-size: 15px;
         }
         .close-btn { position: absolute; top: 12px; right: 15px; font-size: 22px; cursor: pointer; color: #7f8c8d; font-weight: bold; }
         .modal-content h3 { margin-top: 0; color: #2c3e50; border-bottom: 2px solid #ecf0f1; padding-bottom: 8px; }
-        .info-row { margin: 12px 0; font-size: 14px; }
-        .info-label { font-weight: bold; color: #7f8c8d; display: inline-block; width: 100px; }
+        .info-row { margin: 12px 0; }
+        .info-label { font-weight: bold; color: #7f8c8d; display: inline-block; width: 110px; }
     </style>
 </head>
 <body>
 
+    <!-- Access Gate -->
     <div id="login-screen">
         <div class="login-box">
             <h2>Family Portal</h2>
@@ -127,41 +77,13 @@
         </div>
     </div>
 
-    <div id="header">Our Family History</div>
-    
-    <div class="tree-canvas">
-        <div class="tree">
-            <ul>
-                <li>
-                    <div class="couple-wrapper">
-                        <div class="node male" onclick="openProfile('gf')">Grandfather</div>
-                        <div class="node female" onclick="openProfile('gm')">Grandmother</div>
-                    </div>
-                    
-                    <ul>
-                        <li>
-                            <div class="couple-wrapper">
-                                <div class="node male" onclick="openProfile('father')">Father</div>
-                                <div class="node female" onclick="openProfile('mother')">Mother</div>
-                            </div>
-                            <ul>
-                                <li><div class="node male" onclick="openProfile('brother')">Brother</div></li>
-                                <li><div class="node male" onclick="openProfile('abel')">Abel</div></li>
-                                <li><div class="node female" onclick="openProfile('sister')">Sister</div></li>
-                            </ul>
-                        </li>
-                        <li>
-                            <div class="couple-wrapper">
-                                <div class="node male" onclick="openProfile('uncle')">Uncle</div>
-                                <div class="node female" onclick="openProfile('aunt')">Aunt</div>
-                            </div>
-                        </li>
-                    </ul>
-                </li>
-            </ul>
-        </div>
+    <div id="header">
+        <h1>Our Family History</h1>
     </div>
+    
+    <div id="tree"></div>
 
+    <!-- Details View Modal -->
     <div class="modal-overlay" id="profile-modal" onclick="document.getElementById('profile-modal').style.display='none'">
         <div class="modal-content" onclick="event.stopPropagation()">
             <span class="close-btn" onclick="document.getElementById('profile-modal').style.display='none'">&times;</span>
@@ -183,28 +105,132 @@
             }
         }
 
-        const familyDatabase = {
-            gf: { name: "Grandfather", dob: "10/05/1940", gender: "Male", status: "Deceased", desc: "Family Patriarch." },
-            gm: { name: "Grandmother", dob: "15/08/1945", gender: "Female", status: "Alive", desc: "Loving Grandmother." },
-            father: { name: "Father", dob: "22/03/1970", gender: "Male", status: "Alive", desc: "Hardworking dad." },
-            mother: { name: "Mother", dob: "05/09/1975", gender: "Female", status: "Alive", desc: "Caring mom." },
-            abel: { name: "Abel", dob: "14/10/2003", gender: "Male", status: "Alive", desc: "Finance Professional & CMA USA." },
-            brother: { name: "Brother", dob: "12/04/2005", gender: "Male", status: "Alive", desc: "Tech explorer." },
-            sister: { name: "Sister", dob: "18/11/2008", gender: "Female", status: "Alive", desc: "Creative mind." },
-            uncle: { name: "Uncle Name", dob: "01/01/1972", gender: "Male", status: "Alive", desc: "Father's brother." },
-            aunt: { name: "Aunt Name", dob: "02/02/1976", gender: "Female", status: "Alive", desc: "Uncle's wife." }
+        // Full Family Dataset Compiled from PDF Chart
+        const familyData = [
+            // Roots (Generation 1)
+            { id: "yovel", name: "Yovel", gender: "male", pids: ["kunjamma"] },
+            { id: "kunjamma", name: "Kunjamma", gender: "female", pids: ["yovel"] },
+
+            // Branch 1: George Y & Susamma
+            { id: "george_y", name: "George Y", gender: "male", fid: "yovel", mid: "kunjamma", pids: ["susamma_g"] },
+            { id: "susamma_g", name: "Susamma George", gender: "female", pids: ["george_y"] },
+            
+            { id: "benty_g", name: "Benty George", gender: "male", fid: "george_y", mid: "susamma_g", pids: ["sarah"] },
+            { id: "sarah", name: "Sarah", gender: "female", pids: ["benty_g"] },
+            { id: "hannah_b", name: "Hannah Benty", gender: "female", fid: "benty_g", mid: "sarah" },
+            { id: "immanuel_b", name: "Immanuel Benty", gender: "male", fid: "benty_g", mid: "sarah" },
+            { id: "esther_b", name: "Esther Benty", gender: "female", fid: "benty_g", mid: "sarah" },
+
+            { id: "blessy_g", name: "Blessy George", gender: "female", fid: "george_y", mid: "susamma_g", pids: ["jithu_a"] },
+            { id: "jithu_a", name: "Jithu Abraham", gender: "male", pids: ["blessy_g"] },
+            { id: "jeslyn_k", name: "Jeslyn Kurian", gender: "female", mid: "blessy_g", fid: "jithu_a" },
+
+            // Branch 2: Gracy & Pr. A.G. Thomas
+            { id: "gracy_t", name: "Gracy Thomas", gender: "female", fid: "yovel", mid: "kunjamma", pids: ["ag_thomas"] },
+            { id: "ag_thomas", name: "Pr. A.G. Thomas", gender: "male", pids: ["gracy_t"] },
+            
+            { id: "sherly_t", name: "Sherly Thomas", gender: "female", fid: "ag_thomas", mid: "gracy_t", pids: ["william_s"] },
+            { id: "william_s", name: "Pr. William (Sunny)", gender: "male", pids: ["sherly_t"] },
+            { id: "sherin_w", name: "Sherin William", gender: "female", fid: "william_s", mid: "sherly_t" },
+            { id: "sam_w", name: "Sam William", gender: "male", fid: "william_s", mid: "sherly_t" },
+
+            { id: "pheba_t", name: "Pheba Thomas", gender: "female", fid: "ag_thomas", mid: "gracy_t", pids: ["laji_p"] },
+            { id: "laji_p", name: "Laji Philip", gender: "male", pids: ["pheba_t"] },
+            { id: "febin_l", name: "Febin Laji", gender: "male", fid: "laji_p", mid: "pheba_t" },
+
+            { id: "stanly_t", name: "Stanly Thomas", gender: "male", fid: "ag_thomas", mid: "gracy_t", pids: ["rini"] },
+            { id: "rini", name: "Rini", gender: "female", pids: ["stanly_t"] },
+            { id: "christina_s", name: "Christina Stanly", gender: "female", fid: "stanly_t", mid: "rini" },
+            { id: "catherine_s", name: "Catherine Stanly", gender: "female", fid: "stanly_t", mid: "rini" },
+            { id: "shalom_s", name: "Shalom Stanly", gender: "male", fid: "stanly_t", mid: "rini" },
+
+            { id: "susan_t", name: "Susan Thomas", gender: "female", fid: "ag_thomas", mid: "gracy_t", pids: ["baiju_m"] },
+            { id: "baiju_m", name: "Baiju Mathew", gender: "male", pids: ["susan_t"] },
+            { id: "stephan_b", name: "Stephan Baiju", gender: "male", fid: "baiju_m", mid: "susan_t" },
+            { id: "priscilla_b", name: "Priscilla Baiju", gender: "female", fid: "baiju_m", mid: "susan_t" },
+
+            // Branch 3: Marykutty & Chacko
+            { id: "marykutty", name: "Marykutty", gender: "female", fid: "yovel", mid: "kunjamma", pids: ["chacko"] },
+            { id: "chacko", name: "Chacko", gender: "male", pids: ["marykutty"] },
+            
+            { id: "roy_c", name: "Roy Chacko", gender: "male", fid: "chacko", mid: "marykutty", pids: ["sheeba_r"] },
+            { id: "sheeba_r", name: "Sheeba Roy", gender: "female", pids: ["roy_c"] },
+            { id: "angela_r", name: "Angela Roy", gender: "female", fid: "roy_c", mid: "sheeba_r" },
+            { id: "alitza_r", name: "Alitza Roy", gender: "female", fid: "roy_c", mid: "sheeba_r" },
+
+            { id: "reji_c", name: "Reji Chacko", gender: "male", fid: "chacko", mid: "marykutty", pids: ["neena_r"] },
+            { id: "neena_r", name: "Neena Reji", gender: "female", pids: ["reji_c"] },
+            { id: "rhyan_r", name: "Rhyan Reji", gender: "male", fid: "reji_c", mid: "neena_r" },
+            { id: "rafael_r", name: "Rafael Reji", gender: "male", fid: "reji_c", mid: "neena_r" },
+
+            { id: "roby_c", name: "Roby Chacko", gender: "male", fid: "chacko", mid: "marykutty", pids: ["ann_m"] },
+            { id: "ann_m", name: "Ann Mary", gender: "female", pids: ["roby_c"] },
+            { id: "juhan_r", name: "Juhan Roby", gender: "male", fid: "roby_c", mid: "ann_m" },
+
+            // Branch 4: Babykutty & Molamma
+            { id: "babykutty", name: "Babykutty", gender: "male", fid: "yovel", mid: "kunjamma", pids: ["molamma"] },
+            { id: "molamma", name: "Molamma", gender: "female", pids: ["babykutty"] },
+            { id: "grace_b", name: "Grace Baby", gender: "male", fid: "babykutty", mid: "molamma" },
+            { id: "princy_b", name: "Princy Baby", gender: "female", fid: "babykutty", mid: "molamma" },
+
+            // Branch 5: Johnson & Elsy
+            { id: "johnson_y", name: "Johnson Yovel", gender: "male", fid: "yovel", mid: "kunjamma", pids: ["elsy"] },
+            { id: "elsy", name: "Elsy", gender: "female", pids: ["johnson_y"] },
+            { id: "jessy_j", name: "Jessy Johnson", gender: "female", fid: "johnson_y", mid: "elsy" },
+            { id: "jisha_j", name: "Jisha Johnson", gender: "female", fid: "johnson_y", mid: "elsy" },
+
+            // Branch 6: Stephan & Mini
+            { id: "stephan_y", name: "Stephan Yovel", gender: "male", fid: "yovel", mid: "kunjamma", pids: ["mini"] },
+            { id: "mini", name: "Mini", gender: "female", pids: ["stephan_y"] },
+            { id: "joshua_s", name: "Joshua Stephan", gender: "male", fid: "stephan_y", mid: "mini" },
+            { id: "joelyn_s", name: "Joelyn Stephan", gender: "female", fid: "stephan_y", mid: "mini" },
+
+            // Branch 7: Samkutty & Sudha (Your Core Family Branch)
+            { id: "samkutty_j", name: "Samkutty Jovel", gender: "male", fid: "yovel", mid: "kunjamma", pids: ["sudha_m"] },
+            { id: "sudha_m", name: "Sudha Mathew", gender: "female", pids: ["samkutty_j"] },
+            { id: "abel_s", name: "Abel J Sam", gender: "male", fid: "samkutty_j", mid: "sudha_m" },
+            { id: "acsah_s", name: "Acsah J Sam", gender: "female", fid: "samkutty_j", mid: "sudha_m" },
+
+            // Branch 8: Mercy & Jacob
+            { id: "mercy_j", name: "Mercy Jovel", gender: "female", fid: "yovel", mid: "kunjamma", pids: ["jacob_p"] },
+            { id: "jacob_p", name: "Jacob Philip", gender: "male", pids: ["mercy_j"] },
+            { id: "betty_j", name: "Betty Jacob", gender: "female", fid: "jacob_p", mid: "mercy_j" },
+            { id: "melvin_j", name: "Melvin Jacob", gender: "male", fid: "jacob_p", mid: "mercy_j" }
+        ];
+
+        // Unique profile details database for popup modals
+        const profileDetails = {
+            "yovel": { dob: "01/01/1915", status: "Deceased", desc: "Our beloved great-patriarch." },
+            "kunjamma": { dob: "10/05/1922", status: "Deceased", desc: "Our beloved great-matriarch." },
+            "samkutty_j": { dob: "15/04/1965", status: "Alive", desc: "Loving father and baseline mentor." },
+            "sudha_m": { dob: "22/09/1972", status: "Alive", desc: "Caring and supportive mother." },
+            "abel_s": { dob: "14/10/2003", status: "Alive", desc: "Finance professional and qualified Certified Management Accountant (CMA USA)." },
+            "acsah_s": { dob: "18/11/2008", status: "Alive", desc: "Brilliant sister." }
         };
 
-        function openProfile(key) {
-            const p = familyDatabase[key];
-            if (!p) return;
-            document.getElementById("m-name").innerText = p.name;
-            document.getElementById("m-dob").innerText = p.dob;
-            document.getElementById("m-gender").innerText = p.gender;
-            document.getElementById("m-status").innerText = p.status;
-            document.getElementById("m-desc").innerText = p.desc;
+        // Initialize dynamic graphic board canvas template map
+        const chart = new FamilyTree(document.getElementById("tree"), {
+            nodes: familyData,
+            nodeBinding: { field_0: "name" },
+            template: "tomorrow"
+        });
+
+        // Click interaction hook event to launch profile data rows
+        chart.on('click', function(sender, args){
+            const nodeData = familyData.find(n => n.id === args.node.id);
+            if (!nodeData) return false;
+
+            const extra = profileDetails[nodeData.id] || { dob: "N/A", status: "Alive", desc: "No custom description added yet." };
+            
+            document.getElementById("m-name").innerText = nodeData.name;
+            document.getElementById("m-dob").innerText = extra.dob;
+            document.getElementById("m-gender").innerText = nodeData.gender.toUpperCase();
+            document.getElementById("m-status").innerText = extra.status;
+            document.getElementById("m-desc").innerText = extra.desc;
+            
             document.getElementById("profile-modal").style.display = "flex";
-        }
+            return false; // Blocks default built-in side-panels from popping open
+        });
     </script>
 </body>
 </html>
