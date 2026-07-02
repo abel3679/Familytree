@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=3.0, user-scalable=yes">
     <title>Our Family Tree</title>
     <style>
         html, body {
@@ -32,27 +32,37 @@
         
         #header {
             background-color: #2c3e50; color: white; padding: 15px;
-            text-align: center; font-size: 20px; font-weight: bold; position: sticky; top: 0; z-index: 100;
+            text-align: center; font-size: 20px; font-weight: bold; position: sticky; top: 0; left: 0; z-index: 100;
         }
         
-        /* Smooth Native Scrolling Canvas Setup */
+        /* Fixed scroll box that acts like a digital table map */
         .tree-canvas {
-            width: 100vw; height: calc(100vh - 55px);
-            overflow: auto; padding: 40px 20px; box-sizing: border-box;
-            -webkit-overflow-scrolling: touch;
+            width: 100vw;
+            height: calc(100vh - 55px);
+            overflow-x: auto !important;
+            overflow-y: auto !important;
+            padding: 40px;
+            box-sizing: border-box;
+            -webkit-overflow-scrolling: touch; /* Allows ultra-smooth scrolling on phone screens */
         }
 
-        /* Pure Structural CSS Tree Logic */
-        .tree, .tree ul {
-            display: flex; justify-content: center; margin: 0; padding: 0; list-style-type: none;
+        /* Forces the structural branches to stay in one continuous horizontal line */
+        .tree {
+            display: inline-block;
+            min-width: 4800px; /* Forces enough room for all 8 sibling blocks side-by-side */
+            text-align: center;
         }
-        .tree ul { position: relative; padding-top: 25px; min-width: max-content; }
+        
+        .tree ul {
+            display: flex; justify-content: center; margin: 0; padding: 0; list-style-type: none;
+            position: relative; padding-top: 25px;
+        }
         .tree li {
-            text-align: center; position: relative; padding: 25px 8px 0 8px;
+            text-align: center; position: relative; padding: 25px 5px 0 5px;
             display: flex; flex-direction: column; align-items: center;
         }
         
-        /* Branch Connection Lines */
+        /* Architecture connector lines mapping */
         .tree li::before, .tree li::after {
             content: ''; position: absolute; top: 0; right: 50%;
             border-top: 2px solid #a0aec0; width: 50%; height: 25px;
@@ -68,24 +78,26 @@
             border-left: 2px solid #a0aec0; width: 0; height: 25px;
         }
 
-        /* Combined Spousal Borders */
+        /* Combined Spousal Frames */
         .couple-wrapper {
             display: flex; gap: 4px; background: rgba(160, 174, 192, 0.08); 
             padding: 5px; border-radius: 8px; border: 1px dashed #cbd5e0;
+            white-space: nowrap; /* Keeps couples side-by-side */
         }
         
-        /* Node Identity Profiles */
+        /* Profile Blocks */
         .node {
             background: white; padding: 12px 14px; border-radius: 6px;
-            box-shadow: 0 3px 8px rgba(0,0,0,0.06); min-width: 115px; text-align: center;
+            box-shadow: 0 3px 8px rgba(0,0,0,0.06); min-width: 110px; text-align: center;
             font-weight: 500; font-size: 13px; border-top: 4px solid #cbd5e0;
             cursor: pointer; transition: transform 0.15s;
+            white-space: nowrap;
         }
         .node:active { transform: scale(0.95); }
         .male { border-top-color: #3498db; }
         .female { border-top-color: #e74c3c; }
 
-        /* Detail Display Panel Overlay */
+        /* Overlay modal */
         .modal-overlay {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background: rgba(0, 0, 0, 0.5); display: none;
@@ -94,7 +106,7 @@
         .modal-content {
             background: white; padding: 25px; border-radius: 10px;
             width: 85%; max-width: 360px; box-shadow: 0 5px 20px rgba(0,0,0,0.3);
-            position: relative; font-size: 15px;
+            position: relative; font-size: 15px; text-align: left;
         }
         .close-btn { position: absolute; top: 12px; right: 15px; font-size: 22px; cursor: pointer; color: #7f8c8d; font-weight: bold; }
         .modal-content h3 { margin-top: 0; color: #2c3e50; border-bottom: 2px solid #ecf0f1; padding-bottom: 8px; }
@@ -324,25 +336,16 @@
             }
         }
 
-        // Complete static local info profile dictionary
         const familyDatabase = {
             "yovel": { name: "Yovel", dob: "N/A", gender: "Male", status: "Deceased", desc: "Our beloved founding patriarch." },
             "kunjamma": { name: "Kunjamma", dob: "N/A", gender: "Female", status: "Deceased", desc: "Our beloved founding matriarch." },
             "samkutty_j": { name: "Samkutty Jovel", dob: "N/A", gender: "Male", status: "Alive", desc: "Loving father." },
             "sudha_m": { name: "Sudha Mathew", dob: "N/A", gender: "Female", status: "Alive", desc: "Loving mother." },
-            "abel_s": { name: "Abel J Sam", dob: "14/10/2003", gender: "Male", status: "Alive", desc: "Finance professional and qualified Certified Management Accountant (CMA USA)." },
+            "Abel J Sam": { name: "Abel J Sam", dob: "14/10/2003", gender: "Male", status: "Alive", desc: "Finance professional and qualified Certified Management Accountant (CMA USA)." },
             "acsah_s": { name: "Acsah J Sam", dob: "18/11/2008", gender: "Female", status: "Alive", desc: "Dear sister." }
         };
 
         function openProfile(key) {
-            const p = familyDatabase[key] || { name: key.replace('_', ' '), dob: "N/A", gender: "N/A", status: "Alive", desc: "Family relative." };
+            const p = familyDatabase[key] || { name: key.replace('_', ' ').toUpperCase(), dob: "N/A", gender: "N/A", status: "Alive", desc: "Family relative." };
             document.getElementById("m-name").innerText = p.name;
-            document.getElementById("m-dob").innerText = p.dob;
-            document.getElementById("m-gender").innerText = p.gender;
-            document.getElementById("m-status").innerText = p.status;
-            document.getElementById("m-desc").innerText = p.desc;
-            document.getElementById("profile-modal").style.display = "flex";
-        }
-    </script>
-</body>
-</html>
+            document.getElementBy
