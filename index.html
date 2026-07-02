@@ -35,7 +35,6 @@
             text-align: center; font-size: 20px; font-weight: bold; position: sticky; top: 0; left: 0; z-index: 100;
         }
         
-        /* Fixed scroll box that acts like a digital table map */
         .tree-canvas {
             width: 100vw;
             height: calc(100vh - 55px);
@@ -43,13 +42,12 @@
             overflow-y: auto !important;
             padding: 40px;
             box-sizing: border-box;
-            -webkit-overflow-scrolling: touch; /* Allows ultra-smooth scrolling on phone screens */
+            -webkit-overflow-scrolling: touch;
         }
 
-        /* Forces the structural branches to stay in one continuous horizontal line */
         .tree {
             display: inline-block;
-            min-width: 4800px; /* Forces enough room for all 8 sibling blocks side-by-side */
+            min-width: 4800px;
             text-align: center;
         }
         
@@ -62,7 +60,6 @@
             display: flex; flex-direction: column; align-items: center;
         }
         
-        /* Architecture connector lines mapping */
         .tree li::before, .tree li::after {
             content: ''; position: absolute; top: 0; right: 50%;
             border-top: 2px solid #a0aec0; width: 50%; height: 25px;
@@ -78,14 +75,12 @@
             border-left: 2px solid #a0aec0; width: 0; height: 25px;
         }
 
-        /* Combined Spousal Frames */
         .couple-wrapper {
             display: flex; gap: 4px; background: rgba(160, 174, 192, 0.08); 
             padding: 5px; border-radius: 8px; border: 1px dashed #cbd5e0;
-            white-space: nowrap; /* Keeps couples side-by-side */
+            white-space: nowrap;
         }
         
-        /* Profile Blocks */
         .node {
             background: white; padding: 12px 14px; border-radius: 6px;
             box-shadow: 0 3px 8px rgba(0,0,0,0.06); min-width: 110px; text-align: center;
@@ -97,7 +92,6 @@
         .male { border-top-color: #3498db; }
         .female { border-top-color: #e74c3c; }
 
-        /* Overlay modal */
         .modal-overlay {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background: rgba(0, 0, 0, 0.5); display: none;
@@ -328,7 +322,8 @@
 
     <script>
         function checkPassword() {
-            if (document.getElementById("password-input").value === "OurFamily2026") {
+            const userInput = document.getElementById("password-input").value;
+            if (userInput === "OurFamily2026") {
                 document.getElementById("login-screen").remove();
             } else {
                 document.getElementById("error-msg").style.display = "block";
@@ -341,11 +336,20 @@
             "kunjamma": { name: "Kunjamma", dob: "N/A", gender: "Female", status: "Deceased", desc: "Our beloved founding matriarch." },
             "samkutty_j": { name: "Samkutty Jovel", dob: "N/A", gender: "Male", status: "Alive", desc: "Loving father." },
             "sudha_m": { name: "Sudha Mathew", dob: "N/A", gender: "Female", status: "Alive", desc: "Loving mother." },
-            "Abel J Sam": { name: "Abel J Sam", dob: "14/10/2003", gender: "Male", status: "Alive", desc: "Finance professional and qualified Certified Management Accountant (CMA USA)." },
+            "abel_s": { name: "Abel J Sam", dob: "14/10/2003", gender: "Male", status: "Alive", desc: "Finance professional and qualified Certified Management Accountant (CMA USA)." },
             "acsah_s": { name: "Acsah J Sam", dob: "18/11/2008", gender: "Female", status: "Alive", desc: "Dear sister." }
         };
 
         function openProfile(key) {
-            const p = familyDatabase[key] || { name: key.replace('_', ' ').toUpperCase(), dob: "N/A", gender: "N/A", status: "Alive", desc: "Family relative." };
-            document.getElementById("m-name").innerText = p.name;
-            document.getElementBy
+            const p = familyDatabase[key];
+            
+            if (p) {
+                document.getElementById("m-name").innerText = p.name;
+                document.getElementById("m-dob").innerText = p.dob;
+                document.getElementById("m-gender").innerText = p.gender;
+                document.getElementById("m-status").innerText = p.status;
+                document.getElementById("m-desc").innerText = p.desc;
+            } else {
+                // Generates a clean fallback profile name if database entry doesn't exist yet
+                document.getElementById("m-name").innerText = key.toUpperCase();
+                document.getElementByI
