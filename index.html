@@ -76,21 +76,33 @@
         }
 
         .couple-wrapper {
-            display: flex; gap: 4px; background: rgba(160, 174, 192, 0.08); 
-            padding: 5px; border-radius: 8px; border: 1px dashed #cbd5e0;
+            display: flex; gap: 6px; background: rgba(160, 174, 192, 0.08); 
+            padding: 6px; border-radius: 10px; border: 1px dashed #cbd5e0;
             white-space: nowrap;
         }
         
+        /* Updated Photo Card Node Layout */
         .node {
-            background: white; padding: 12px 14px; border-radius: 6px;
-            box-shadow: 0 3px 8px rgba(0,0,0,0.06); min-width: 110px; text-align: center;
-            font-weight: 500; font-size: 13px; border-top: 4px solid #cbd5e0;
+            background: white; border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.08); width: 115px; text-align: center;
             cursor: pointer; transition: transform 0.15s;
-            white-space: nowrap;
+            overflow: hidden; display: flex; flex-direction: column;
+            border-top: 4px solid #cbd5e0;
         }
         .node:active { transform: scale(0.95); }
         .male { border-top-color: #3498db; }
         .female { border-top-color: #e74c3c; }
+
+        /* Responsive Picture Element Box */
+        .node img {
+            width: 115px; height: 115px; object-fit: cover;
+            background-color: #eaedf1; display: block;
+        }
+        .node-name {
+            padding: 10px 4px; font-weight: 500; font-size: 13px;
+            white-space: normal; background: white; word-break: break-word;
+            line-height: 1.3;
+        }
 
         .modal-overlay {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
@@ -115,7 +127,7 @@
             <h2>Family Portal</h2>
             <p>Enter password to view tree.</p>
             <input type="password" id="password-input" placeholder="Password" onkeypress="if(event.key==='Enter') unlockPortal()">
-            <button onclick="unlockPortal()">Access Tree</button>
+            <button onclick="checkPassword() || unlockPortal()">Access Tree</button>
             <div id="error-msg">Incorrect password.</div>
         </div>
     </div>
@@ -126,180 +138,298 @@
         <div class="tree">
             <ul>
                 <li>
+                    <!-- Generation 1 Root -->
                     <div class="couple-wrapper">
-                        <div class="node male" onclick="openProfile('yovel')">Yovel</div>
-                        <div class="node female" onclick="openProfile('kunjamma')">Kunjamma</div>
+                        <div class="node male" onclick="openProfile('yovel')">
+                            <img src="avatar_m.svg" onerror="this.src='https://api.dicebear.com/7.x/initials/svg?seed=Yovel'" />
+                            <div class="node-name">Yovel</div>
+                        </div>
+                        <div class="node female" onclick="openProfile('kunjamma')">
+                            <img src="avatar_f.svg" onerror="this.src='https://api.dicebear.com/7.x/initials/svg?seed=Kunjamma'" />
+                            <div class="node-name">Kunjamma</div>
+                        </div>
                     </div>
                     
+                    <!-- Generation 2 Main Branches -->
                     <ul>
+                        <!-- Branch 1: George Y & Susamma -->
                         <li>
                             <div class="couple-wrapper">
-                                <div class="node male" onclick="openProfile('george_y')">George Y</div>
-                                <div class="node female" onclick="openProfile('susamma_g')">Susamma George</div>
+                                <div class="node male" onclick="openProfile('george_y')">
+                                    <img src="george_y.jpg" onerror="this.src='https://api.dicebear.com/7.x/initials/svg?seed=George%20Y'" />
+                                    <div class="node-name">George Y</div>
+                                </div>
+                                <div class="node female" onclick="openProfile('susamma_g')">
+                                    <img src="susamma_g.jpg" onerror="this.src='https://api.dicebear.com/7.x/initials/svg?seed=Susamma'" />
+                                    <div class="node-name">Susamma George</div>
+                                </div>
                             </div>
                             <ul>
                                <li>
                                     <div class="couple-wrapper">
-                                        <div class="node male" onclick="openProfile('benty_g')">Benty George</div>
-                                        <div class="node female" onclick="openProfile('sarah')">Sarah</div>
+                                        <div class="node male" onclick="openProfile('benty_g')">
+                                            <img src="benty_g.jpg" onerror="this.src='https://api.dicebear.com/7.x/initials/svg?seed=Benty'" />
+                                            <div class="node-name">Benty George</div>
+                                        </div>
+                                        <div class="node female" onclick="openProfile('sarah')">
+                                            <img src="sarah.jpg" onerror="this.src='https://api.dicebear.com/7.x/initials/svg?seed=Sarah'" />
+                                            <div class="node-name">Sarah</div>
+                                        </div>
                                     </div>
                                     <ul>
-                                        <li><div class="node female" onclick="openProfile('hannah_b')">Hannah Benty</div></li>
-                                        <li><div class="node male" onclick="openProfile('immanuel_b')">Immanuel Benty</div></li>
-                                        <li><div class="node female" onclick="openProfile('esther_b')">Esther Benty</div></li>
+                                        <li><div class="node female" onclick="openProfile('hannah_b')"><img src="hannah_b.jpg" onerror="this.src='https://api.dicebear.com/7.x/initials/svg?seed=Hannah'" /><div class="node-name">Hannah Benty</div></div></li>
+                                        <li><div class="node male" onclick="openProfile('immanuel_b')"><img src="immanuel_b.jpg" onerror="this.src='https://api.dicebear.com/7.x/initials/svg?seed=Immanuel'" /><div class="node-name">Immanuel Benty</div></div></li>
+                                        <li><div class="node female" onclick="openProfile('esther_b')"><img src="esther_b.jpg" onerror="this.src='https://api.dicebear.com/7.x/initials/svg?seed=Esther'" /><div class="node-name">Esther Benty</div></div></li>
                                     </ul>
                                </li>
                                <li>
                                     <div class="couple-wrapper">
-                                        <div class="node female" onclick="openProfile('blessy_g')">Blessy George</div>
-                                        <div class="node male" onclick="openProfile('jithu_a')">Jithu Abraham</div>
+                                        <div class="node female" onclick="openProfile('blessy_g')">
+                                            <img src="blessy_g.jpg" onerror="this.src='https://api.dicebear.com/7.x/initials/svg?seed=Blessy'" />
+                                            <div class="node-name">Blessy George</div>
+                                        </div>
+                                        <div class="node male" onclick="openProfile('jithu_a')">
+                                            <img src="jithu_a.jpg" onerror="this.src='https://api.dicebear.com/7.x/initials/svg?seed=Jithu'" />
+                                            <div class="node-name">Jithu Abraham</div>
+                                        </div>
                                     </div>
                                     <ul>
-                                        <li><div class="node female" onclick="openProfile('jeslyn_k')">Jeslyn Kurian</div></li>
+                                        <li><div class="node female" onclick="openProfile('jeslyn_k')"><img src="jeslyn_k.jpg" onerror="this.src='https://api.dicebear.com/7.x/initials/svg?seed=Jeslyn'" /><div class="node-name">Jeslyn Kurian</div></div></li>
                                     </ul>
                                </li>
                             </ul>
                         </li>
 
+                        <!-- Branch 2: Gracy Thomas & Pr. A.G. Thomas -->
                         <li>
                             <div class="couple-wrapper">
-                                <div class="node female" onclick="openProfile('gracy_t')">Gracy Thomas</div>
-                                <div class="node male" onclick="openProfile('ag_thomas')">Pr. A.G. Thomas</div>
+                                <div class="node female" onclick="openProfile('gracy_t')">
+                                    <img src="gracy_t.jpg" onerror="this.src='https://api.dicebear.com/7.x/initials/svg?seed=Gracy'" />
+                                    <div class="node-name">Gracy Thomas</div>
+                                </div>
+                                <div class="node male" onclick="openProfile('ag_thomas')">
+                                    <img src="ag_thomas.jpg" onerror="this.src='https://api.dicebear.com/7.x/initials/svg?seed=AG'" />
+                                    <div class="node-name">Pr. A.G. Thomas</div>
+                                </div>
                             </div>
                             <ul>
                                 <li>
                                     <div class="couple-wrapper">
-                                        <div class="node female" onclick="openProfile('sherly_t')">Sherly Thomas</div>
-                                        <div class="node male" onclick="openProfile('william_s')">Pr. William</div>
+                                        <div class="node female" onclick="openProfile('sherly_t')">
+                                            <img src="sherly_t.jpg" onerror="this.src='https://api.dicebear.com/7.x/initials/svg?seed=Sherly'" />
+                                            <div class="node-name">Sherly Thomas</div>
+                                        </div>
+                                        <div class="node male" onclick="openProfile('william_s')">
+                                            <img src="william_s.jpg" onerror="this.src='https://api.dicebear.com/7.x/initials/svg?seed=William'" />
+                                            <div class="node-name">Pr. William</div>
+                                        </div>
                                     </div>
                                     <ul>
-                                        <li><div class="node female" onclick="openProfile('sherin_w')">Sherin William</div></li>
-                                        <li><div class="node male" onclick="openProfile('sam_w')">Sam William</div></li>
+                                        <li><div class="node female" onclick="openProfile('sherin_w')"><img src="sherin_w.jpg" onerror="this.src='https://api.dicebear.com/7.x/initials/svg?seed=Sherin'" /><div class="node-name">Sherin William</div></div></li>
+                                        <li><div class="node male" onclick="openProfile('sam_w')"><img src="sam_w.jpg" onerror="this.src='https://api.dicebear.com/7.x/initials/svg?seed=Sam'" /><div class="node-name">Sam William</div></div></li>
                                     </ul>
                                 </li>
                                 <li>
                                     <div class="couple-wrapper">
-                                        <div class="node female" onclick="openProfile('pheba_t')">Pheba Thomas</div>
-                                        <div class="node male" onclick="openProfile('laji_p')">Laji Philip</div>
+                                        <div class="node female" onclick="openProfile('pheba_t')">
+                                            <img src="pheba_t.jpg" onerror="this.src='https://api.dicebear.com/7.x/initials/svg?seed=Pheba'" />
+                                            <div class="node-name">Pheba Thomas</div>
+                                        </div>
+                                        <div class="node male" onclick="openProfile('laji_p')">
+                                            <img src="laji_p.jpg" onerror="this.src='https://api.dicebear.com/7.x/initials/svg?seed=Laji'" />
+                                            <div class="node-name">Laji Philip</div>
+                                        </div>
                                     </div>
                                     <ul>
-                                        <li><div class="node male" onclick="openProfile('febin_l')">Febin Laji</div></li>
+                                        <li><div class="node male" onclick="openProfile('febin_l')"><img src="febin_l.jpg" onerror="this.src='https://api.dicebear.com/7.x/initials/svg?seed=Febin'" /><div class="node-name">Febin Laji</div></div></li>
                                     </ul>
                                 </li>
                                 <li>
                                     <div class="couple-wrapper">
-                                        <div class="node male" onclick="openProfile('stanly_t')">Stanly Thomas</div>
-                                        <div class="node female" onclick="openProfile('rini')">Rini</div>
+                                        <div class="node male" onclick="openProfile('stanly_t')">
+                                            <img src="stanly_t.jpg" onerror="this.src='https://api.dicebear.com/7.x/initials/svg?seed=Stanly'" />
+                                            <div class="node-name">Stanly Thomas</div>
+                                        </div>
+                                        <div class="node female" onclick="openProfile('rini')">
+                                            <img src="rini.jpg" onerror="this.src='https://api.dicebear.com/7.x/initials/svg?seed=Rini'" />
+                                            <div class="node-name">Rini</div>
+                                        </div>
                                     </div>
                                     <ul>
-                                        <li><div class="node female" onclick="openProfile('christina_s')">Christina Stanly</div></li>
-                                        <li><div class="node female" onclick="openProfile('catherine_s')">Catherine Stanly</div></li>
-                                        <li><div class="node male" onclick="openProfile('shalom_s')">Shalom Stanly</div></li>
+                                        <li><div class="node female" onclick="openProfile('christina_s')"><img src="christina_s.jpg" onerror="this.src='https://api.dicebear.com/7.x/initials/svg?seed=Christina'" /><div class="node-name">Christina Stanly</div></div></li>
+                                        <li><div class="node female" onclick="openProfile('catherine_s')"><img src="catherine_s.jpg" onerror="this.src='https://api.dicebear.com/7.x/initials/svg?seed=Catherine'" /><div class="node-name">Catherine Stanly</div></div></li>
+                                        <li><div class="node male" onclick="openProfile('shalom_s')"><img src="shalom_s.jpg" onerror="this.src='https://api.dicebear.com/7.x/initials/svg?seed=Shalom'" /><div class="node-name">Shalom Stanly</div></div></li>
                                     </ul>
                                 </li>
                                 <li>
                                     <div class="couple-wrapper">
-                                        <div class="node female" onclick="openProfile('susan_t')">Susan Thomas</div>
-                                        <div class="node male" onclick="openProfile('baiju_m')">Baiju Mathew</div>
+                                        <div class="node female" onclick="openProfile('susan_t')">
+                                            <img src="susan_t.jpg" onerror="this.src='https://api.dicebear.com/7.x/initials/svg?seed=Susan'" />
+                                            <div class="node-name">Susan Thomas</div>
+                                        </div>
+                                        <div class="node male" onclick="openProfile('baiju_m')">
+                                            <img src="baiju_m.jpg" onerror="this.src='https://api.dicebear.com/7.x/initials/svg?seed=Baiju'" />
+                                            <div class="node-name">Baiju Mathew</div>
+                                        </div>
                                     </div>
                                     <ul>
-                                        <li><div class="node male" onclick="openProfile('stephan_b')">Stephan Baiju</div></li>
-                                        <li><div class="node female" onclick="openProfile('priscilla_b')">Priscilla Baiju</div></li>
-                                    </ul>
-                                </li>
-                            </ul>
-                        </li>
-
-                        <li>
-                            <div class="couple-wrapper">
-                                <div class="node female" onclick="openProfile('marykutty')">Marykutty</div>
-                                <div class="node male" onclick="openProfile('chacko')">Chacko</div>
-                            </div>
-                            <ul>
-                                <li>
-                                    <div class="couple-wrapper">
-                                        <div class="node male" onclick="openProfile('roy_c')">Roy Chacko</div>
-                                        <div class="node female" onclick="openProfile('sheeba_r')">Sheeba Roy</div>
-                                    </div>
-                                    <ul>
-                                        <li><div class="node female" onclick="openProfile('angela_r')">Angela Roy</div></li>
-                                        <li><div class="node female" onclick="openProfile('alitza_r')">Alitza Roy</div></li>
-                                    </ul>
-                                </li>
-                                <li>
-                                    <div class="couple-wrapper">
-                                        <div class="node male" onclick="openProfile('reji_c')">Reji Chacko</div>
-                                        <div class="node female" onclick="openProfile('neena_r')">Neena Reji</div>
-                                    </div>
-                                    <ul>
-                                        <li><div class="node male" onclick="openProfile('rhyan_r')">Rhyan Reji</div></li>
-                                        <li><div class="node male" onclick="openProfile('rafael_r')">Rafael Reji</div></li>
-                                    </ul>
-                                </li>
-                                <li>
-                                    <div class="couple-wrapper">
-                                        <div class="node male" onclick="openProfile('roby_c')">Roby Chacko</div>
-                                        <div class="node female" onclick="openProfile('ann_m')">Ann Mary</div>
-                                    </div>
-                                    <ul>
-                                        <li><div class="node male" onclick="openProfile('juhan_r')">Juhan Roby</div></li>
+                                        <li><div class="node male" onclick="openProfile('stephan_b')"><img src="stephan_b.jpg" onerror="this.src='https://api.dicebear.com/7.x/initials/svg?seed=Stephan'" /><div class="node-name">Stephan Baiju</div></div></li>
+                                        <li><div class="node female" onclick="openProfile('priscilla_b')"><img src="priscilla_b.jpg" onerror="this.src='https://api.dicebear.com/7.x/initials/svg?seed=Priscilla'" /><div class="node-name">Priscilla Baiju</div></div></li>
                                     </ul>
                                 </li>
                             </ul>
                         </li>
 
+                        <!-- Branch 3: Marykutty & Chacko -->
                         <li>
                             <div class="couple-wrapper">
-                                <div class="node male" onclick="openProfile('babykutty')">Babykutty</div>
-                                <div class="node female" onclick="openProfile('molamma')">Molamma</div>
+                                <div class="node female" onclick="openProfile('marykutty')">
+                                    <img src="marykutty.jpg" onerror="this.src='https://api.dicebear.com/7.x/initials/svg?seed=Marykutty'" />
+                                    <div class="node-name">Marykutty</div>
+                                </div>
+                                <div class="node male" onclick="openProfile('chacko')">
+                                    <img src="chacko.jpg" onerror="this.src='https://api.dicebear.com/7.x/initials/svg?seed=Chacko'" />
+                                    <div class="node-name">Chacko</div>
+                                </div>
                             </div>
                             <ul>
-                                <li><div class="node male" onclick="openProfile('grace_b')">Grace Baby</div></li>
-                                <li><div class="node female" onclick="openProfile('princy_b')">Princy Baby</div></li>
+                                <li>
+                                    <div class="couple-wrapper">
+                                        <div class="node male" onclick="openProfile('roy_c')">
+                                            <img src="roy_c.jpg" onerror="this.src='https://api.dicebear.com/7.x/initials/svg?seed=Roy'" />
+                                            <div class="node-name">Roy Chacko</div>
+                                        </div>
+                                        <div class="node female" onclick="openProfile('sheeba_r')">
+                                            <img src="sheeba_r.jpg" onerror="this.src='https://api.dicebear.com/7.x/initials/svg?seed=Sheeba'" />
+                                            <div class="node-name">Sheeba Roy</div>
+                                        </div>
+                                    </div>
+                                    <ul>
+                                        <li><div class="node female" onclick="openProfile('angela_r')"><img src="angela_r.jpg" onerror="this.src='https://api.dicebear.com/7.x/initials/svg?seed=Angela'" /><div class="node-name">Angela Roy</div></div></li>
+                                        <li><div class="node female" onclick="openProfile('alitza_r')"><img src="alitza_r.jpg" onerror="this.src='https://api.dicebear.com/7.x/initials/svg?seed=Alitza'" /><div class="node-name">Alitza Roy</div></div></li>
+                                    </ul>
+                                </li>
+                                <li>
+                                    <div class="couple-wrapper">
+                                        <div class="node male" onclick="openProfile('reji_c')">
+                                            <img src="reji_c.jpg" onerror="this.src='https://api.dicebear.com/7.x/initials/svg?seed=Reji'" />
+                                            <div class="node-name">Reji Chacko</div>
+                                        </div>
+                                        <div class="node female" onclick="openProfile('neena_r')">
+                                            <img src="neena_r.jpg" onerror="this.src='https://api.dicebear.com/7.x/initials/svg?seed=Neena'" />
+                                            <div class="node-name">Neena Reji</div>
+                                        </div>
+                                    </div>
+                                    <ul>
+                                        <li><div class="node male" onclick="openProfile('rhyan_r')"><img src="rhyan_r.jpg" onerror="this.src='https://api.dicebear.com/7.x/initials/svg?seed=Rhyan'" /><div class="node-name">Rhyan Reji</div></div></li>
+                                        <li><div class="node male" onclick="openProfile('rafael_r')"><img src="rafael_r.jpg" onerror="this.src='https://api.dicebear.com/7.x/initials/svg?seed=Rafael'" /><div class="node-name">Rafael Reji</div></div></li>
+                                    </ul>
+                                </li>
+                                <li>
+                                    <div class="couple-wrapper">
+                                        <div class="node male" onclick="openProfile('roby_c')">
+                                            <img src="roby_c.jpg" onerror="this.src='https://api.dicebear.com/7.x/initials/svg?seed=Roby'" />
+                                            <div class="node-name">Roby Chacko</div>
+                                        </div>
+                                        <div class="node female" onclick="openProfile('ann_m')">
+                                            <img src="ann_m.jpg" onerror="this.src='https://api.dicebear.com/7.x/initials/svg?seed=Ann'" />
+                                            <div class="node-name">Ann Mary</div>
+                                        </div>
+                                    </div>
+                                    <ul>
+                                        <li><div class="node male" onclick="openProfile('juhan_r')"><img src="juhan_r.jpg" onerror="this.src='https://api.dicebear.com/7.x/initials/svg?seed=Juhan'" /><div class="node-name">Juhan Roby</div></div></li>
+                                    </ul>
+                                </li>
                             </ul>
                         </li>
 
+                        <!-- Branch 4: Babykutty & Molamma -->
                         <li>
                             <div class="couple-wrapper">
-                                <div class="node male" onclick="openProfile('johnson_y')">Johnson Yovel</div>
-                                <div class="node female" onclick="openProfile('elsy')">Elsy</div>
+                                <div class="node male" onclick="openProfile('babykutty')">
+                                    <img src="babykutty.jpg" onerror="this.src='https://api.dicebear.com/7.x/initials/svg?seed=Babykutty'" />
+                                    <div class="node-name">Babykutty</div>
+                                </div>
+                                <div class="node female" onclick="openProfile('molamma')">
+                                    <img src="molamma.jpg" onerror="this.src='https://api.dicebear.com/7.x/initials/svg?seed=Molamma'" />
+                                    <div class="node-name">Molamma</div>
+                                </div>
                             </div>
                             <ul>
-                                <li><div class="node female" onclick="openProfile('jessy_j')">Jessy Johnson</div></li>
-                                <li><div class="node female" onclick="openProfile('jisha_j')">Jisha Johnson</div></li>
+                                <li><div class="node male" onclick="openProfile('grace_b')"><img src="grace_b.jpg" onerror="this.src='https://api.dicebear.com/7.x/initials/svg?seed=Grace'" /><div class="node-name">Grace Baby</div></div></li>
+                                <li><div class="node female" onclick="openProfile('princy_b')"><img src="princy_b.jpg" onerror="this.src='https://api.dicebear.com/7.x/initials/svg?seed=Princy'" /><div class="node-name">Princy Baby</div></div></li>
                             </ul>
                         </li>
 
+                        <!-- Branch 5: Johnson & Elsy -->
                         <li>
                             <div class="couple-wrapper">
-                                <div class="node male" onclick="openProfile('stephan_y')">Stephan Yovel</div>
-                                <div class="node female" onclick="openProfile('mini')">Mini</div>
+                                <div class="node male" onclick="openProfile('johnson_y')">
+                                    <img src="johnson_y.jpg" onerror="this.src='https://api.dicebear.com/7.x/initials/svg?seed=Johnson'" />
+                                    <div class="node-name">Johnson Yovel</div>
+                                </div>
+                                <div class="node female" onclick="openProfile('elsy')">
+                                    <img src="elsy.jpg" onerror="this.src='https://api.dicebear.com/7.x/initials/svg?seed=Elsy'" />
+                                    <div class="node-name">Elsy</div>
+                                </div>
                             </div>
                             <ul>
-                                <li><div class="node male" onclick="openProfile('joshua_s')">Joshua Stephan</div></li>
-                                <li><div class="node female" onclick="openProfile('joelyn_s')">Joelyn Stephan</div></li>
+                                <li><div class="node female" onclick="openProfile('jessy_j')"><img src="jessy_j.jpg" onerror="this.src='https://api.dicebear.com/7.x/initials/svg?seed=Jessy'" /><div class="node-name">Jessy Johnson</div></div></li>
+                                <li><div class="node female" onclick="openProfile('jisha_j')"><img src="jisha_j.jpg" onerror="this.src='https://api.dicebear.com/7.x/initials/svg?seed=Jisha'" /><div class="node-name">Jisha Johnson</div></div></li>
                             </ul>
                         </li>
 
+                        <!-- Branch 6: Stephan Yovel & Mini -->
                         <li>
                             <div class="couple-wrapper">
-                                <div class="node male" onclick="openProfile('samkutty_j')">Samkutty Jovel</div>
-                                <div class="node female" onclick="openProfile('siby_s')">Siby Sam</div>
+                                <div class="node male" onclick="openProfile('stephan_y')">
+                                    <img src="stephan_y.jpg" onerror="this.src='https://api.dicebear.com/7.x/initials/svg?seed=Stephan'" />
+                                    <div class="node-name">Stephan Yovel</div>
+                                </div>
+                                <div class="node female" onclick="openProfile('mini')">
+                                    <img src="mini.jpg" onerror="this.src='https://api.dicebear.com/7.x/initials/svg?seed=Mini'" />
+                                    <div class="node-name">Mini</div>
+                                </div>
                             </div>
                             <ul>
-                                <li><div class="node male" onclick="openProfile('abel_s')">Abel J Sam</div></li>
-                                <li><div class="node female" onclick="openProfile('acsah_s')">Acsah J Sam</div></li>
+                                <li><div class="node male" onclick="openProfile('joshua_s')"><img src="joshua_s.jpg" onerror="this.src='https://api.dicebear.com/7.x/initials/svg?seed=Joshua'" /><div class="node-name">Joshua Stephan</div></div></li>
+                                <li><div class="node female" onclick="openProfile('joelyn_s')"><img src="joelyn_s.jpg" onerror="this.src='https://api.dicebear.com/7.x/initials/svg?seed=Joelyn'" /><div class="node-name">Joelyn Stephan</div></div></li>
                             </ul>
                         </li>
 
+                        <!-- Branch 7: Samkutty & Siby Sam -->
                         <li>
                             <div class="couple-wrapper">
-                                <div class="node female" onclick="openProfile('mercy_j')">Mercy Jovel</div>
-                                <div class="node male" onclick="openProfile('jacob_p')">Jacob Philip</div>
+                                <div class="node male" onclick="openProfile('samkutty_j')">
+                                    <img src="samkutty_j.jpg" onerror="this.src='https://api.dicebear.com/7.x/initials/svg?seed=Samkutty'" />
+                                    <div class="node-name">Samkutty Jovel</div>
+                                </div>
+                                <div class="node female" onclick="openProfile('siby_s')">
+                                    <img src="siby_s.jpg" onerror="this.src='https://api.dicebear.com/7.x/initials/svg?seed=Siby'" />
+                                    <div class="node-name">Siby Sam</div>
+                                </div>
                             </div>
                             <ul>
-                                <li><div class="node female" onclick="openProfile('betty_j')">Betty Jacob</div></li>
-                                <li><div class="node male" onclick="openProfile('melvin_j')">Melvin Jacob</div></li>
+                                <li><div class="node male" onclick="openProfile('abel_s')"><img src="abel_s.jpg" onerror="this.src='https://api.dicebear.com/7.x/initials/svg?seed=Abel'" /><div class="node-name">Abel J Sam</div></div></li>
+                                <li><div class="node female" onclick="openProfile('acsah_s')"><img src="acsah_s.jpg" onerror="this.src='https://api.dicebear.com/7.x/initials/svg?seed=Acsah'" /><div class="node-name">Acsah J Sam</div></div></li>
+                            </ul>
+                        </li>
+
+                        <!-- Branch 8: Mercy & Jacob -->
+                        <li>
+                            <div class="couple-wrapper">
+                                <div class="node female" onclick="openProfile('mercy_j')">
+                                    <img src="mercy_j.jpg" onerror="this.src='https://api.dicebear.com/7.x/initials/svg?seed=Mercy'" />
+                                    <div class="node-name">Mercy Jovel</div>
+                                </div>
+                                <div class="node male" onclick="openProfile('jacob_p')">
+                                    <img src="jacob_p.jpg" onerror="this.src='https://api.dicebear.com/7.x/initials/svg?seed=Jacob'" />
+                                    <div class="node-name">Jacob Philip</div>
+                                </div>
+                            </div>
+                            <ul>
+                                <li><div class="node female" onclick="openProfile('betty_j')"><img src="betty_j.jpg" onerror="this.src='https://api.dicebear.com/7.x/initials/svg?seed=Betty'" /><div class="node-name">Betty Jacob</div></div></li>
+                                <li><div class="node male" onclick="openProfile('melvin_j')"><img src="melvin_j.jpg" onerror="this.src='https://api.dicebear.com/7.x/initials/svg?seed=Melvin'" /><div class="node-name">Melvin Jacob</div></div></li>
                             </ul>
                         </li>
 
@@ -309,6 +439,7 @@
         </div>
     </div>
 
+    <!-- Details Overlay Modal -->
     <div class="modal-overlay" id="profile-modal" onclick="document.getElementById('profile-modal').style.display='none'">
         <div class="modal-content" onclick="event.stopPropagation()">
             <span class="close-btn" onclick="document.getElementById('profile-modal').style.display='none'">&times;</span>
